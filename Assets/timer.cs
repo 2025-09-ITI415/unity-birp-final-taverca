@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
+using NUnit.Framework.Constraints;
 
 public class GameTimer : MonoBehaviour
 {
@@ -8,6 +10,7 @@ public class GameTimer : MonoBehaviour
     public Text highScoreText;
     public Text scoreText;
     public Button startButton;
+    public Button restartButton;
     public GameObject player;
     public GameObject winner;
     public GameObject intro;
@@ -22,18 +25,26 @@ public class GameTimer : MonoBehaviour
     private const int maxScore = 12;
 
     private float bestTime = Mathf.Infinity;
+    private const string BEST_TIME = "BestTime";
 
     void Start()
     {
-        if (PlayerPrefs.HasKey("BestTime"))
+        if (PlayerPrefs.HasKey(BEST_TIME))
         {
-            bestTime = PlayerPrefs.GetFloat("BestTime");
+            bestTime = PlayerPrefs.GetFloat(BEST_TIME);
+        }
+        else
+        {
+            bestTime = 0;
         }
 
-        UpdateHighScoreText();
+            UpdateHighScoreText();
         UpdateScoreText();
         timerText.text = "Time: 0.00";
         startButton.onClick.AddListener(StartTimer);
+        {
+            restartButton.onClick.AddListener(RestartGame);
+        }
     }
 
     void Update()
@@ -68,12 +79,13 @@ public class GameTimer : MonoBehaviour
         if (elapsedTime < bestTime)
         {
             bestTime = elapsedTime;
-            PlayerPrefs.SetFloat("BestTime", bestTime);
+            PlayerPrefs.SetFloat(BEST_TIME, bestTime);
             PlayerPrefs.Save();
         }
 
         UpdateHighScoreText();
         winner.SetActive(true);
+        restartButton.onClick.AddListener(RestartGame);
     }
 
     public void AddPoint()
@@ -99,6 +111,10 @@ public class GameTimer : MonoBehaviour
         if (bestTime < Mathf.Infinity)
             highScoreText.text = "Best Time: " + bestTime.ToString("F2");
         else
-            highScoreText.text = "Best Time:";
+            highScoreText.text = "Best Time: --";
+    }
+    void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
