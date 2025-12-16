@@ -10,6 +10,7 @@ public class GameTimer : MonoBehaviour
     public Button startButton;
     public GameObject player;
     public GameObject winner;
+    public GameObject intro;
     public List<GameObject> collectibles;
     public List<GameObject> doors;
 
@@ -54,6 +55,7 @@ public class GameTimer : MonoBehaviour
         foreach (GameObject door in doors)
         {
             door.SetActive(false);
+            intro.SetActive(false);
         }
     }
 

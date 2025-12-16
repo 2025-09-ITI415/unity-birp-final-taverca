@@ -4,18 +4,16 @@ public class Collectible : MonoBehaviour
 {
     private bool collected = false;
 
-    private void OnMouseDown()
+    private void OnTriggerEnter(Collider other)
     {
         if (collected) return;
 
-        collected = true;
-
-        GameTimer timer = FindObjectOfType<GameTimer>();
-        if (timer != null)
+        if (other.CompareTag("Player"))
         {
-            timer.AddPoint();
-        }
+            collected = true;
 
-        gameObject.SetActive(false);
+            FindObjectOfType<GameTimer>().AddPoint();
+            gameObject.SetActive(false);
+        }
     }
 }
