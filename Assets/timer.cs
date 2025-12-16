@@ -2,13 +2,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
-using NUnit.Framework.Constraints;
 
 public class GameTimer : MonoBehaviour
 {
     public Text timerText;
     public Text highScoreText;
     public Text scoreText;
+    public Text finalScore;
     public Button startButton;
     public Button restartButton;
     public GameObject player;
@@ -35,7 +35,7 @@ public class GameTimer : MonoBehaviour
         }
         else
         {
-            bestTime = 0;
+            bestTime = Mathf.Infinity;
         }
 
             UpdateHighScoreText();
@@ -75,6 +75,7 @@ public class GameTimer : MonoBehaviour
         if (!isTiming) return;
 
         isTiming = false;
+        finalScore.text = "Your Final Time: " + elapsedTime.ToString("F2");
 
         if (elapsedTime < bestTime)
         {
@@ -85,7 +86,6 @@ public class GameTimer : MonoBehaviour
 
         UpdateHighScoreText();
         winner.SetActive(true);
-        restartButton.onClick.AddListener(RestartGame);
     }
 
     public void AddPoint()
